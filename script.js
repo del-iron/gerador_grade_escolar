@@ -11,7 +11,7 @@ const weekDays = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
 const grades = ["6º ano", "7º ano", "8º ano", "9º ano"];
 
 function addTeacher() {
-    const name = document.getElementById('teacherName').value;
+    const name = document.getElementById('teacherName').value.trim();
     if (!name) {
         showError("Por favor, insira o nome do professor.");
         return;
@@ -25,19 +25,15 @@ function addTeacher() {
         return;
     }
 
-    teachers.push({
-        name,
-        subjects: teacherSubjects
-    });
-
+    teachers.push({ name, subjects: teacherSubjects });
     document.getElementById('teacherName').value = '';
     updateTeacherList();
     showError("");
 }
 
 function addSubject() {
-    const name = document.getElementById('subjectName').value;
-    const weeklyClasses = parseInt(document.getElementById('weeklyClasses').value);
+    const name = document.getElementById('subjectName').value.trim();
+    const weeklyClasses = parseInt(document.getElementById('weeklyClasses').value, 10);
     const restrictions = getRestrictions();
 
     if (!name || !weeklyClasses) {
@@ -45,12 +41,7 @@ function addSubject() {
         return;
     }
 
-    subjects.push({
-        name,
-        weeklyClasses,
-        restrictions
-    });
-
+    subjects.push({ name, weeklyClasses, restrictions });
     document.getElementById('subjectName').value = '';
     document.getElementById('weeklyClasses').value = '';
     document.getElementById('restrictions').innerHTML = '';
@@ -121,10 +112,10 @@ function generateGradeSchedule(grade) {
 }
 
 function hasRestriction(subject, dayIndex, timeIndex) {
+    const [start, end] = classTimes[timeIndex].split(' - ');
     return subject.restrictions.some(r => 
         r.day === weekDays[dayIndex] &&
-        classTimes[timeIndex].split(' - ')[0] >= r.startTime &&
-        classTimes[timeIndex].split(' - ')[1] <= r.endTime
+        (start < r.endTime && end > r.startTime)
     );
 }
 
@@ -167,11 +158,20 @@ function showError(message) {
 }
 
 function updateTeacherList() {
-    // Placeholder para atualização da lista de professores
+    const container = document.getElementById('teacherList');
+    container.innerHTML = teachers.map(t => `<li>${t.name} - ${t.subjects.join(', ')}</li>`).join('');
 }
 
 function updateSubjectsList() {
-    // Placeholder para atualização da lista de disciplinas
+    const container = document.getElementById('subjectList');
+    container.innerHTML = subjects.map(s => `
+        <li>
+            ${s.name} (${s.weeklyClasses} aulas/semana)
+            <ul>
+                ${s.restrictions.map(r => `<li>${r.day}: ${r.startTime} - ${r.endTime}</li>`).join('')}
+            </ul>
+        </li>
+    `).join('');
 }
 
 function updateTeacherSubjectsSelect() {
