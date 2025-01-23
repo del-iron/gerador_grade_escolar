@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Grade Escolar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de Grade Escolar</h1>
+        
+        <div class="form-section">
+            <h2>Adicionar Professor</h2>
+            <div class="form-group">
+                <label for="teacherName">Nome do Professor:</label>
+                <input type="text" id="teacherName">
+            </div>
+            <div class="form-group">
+                <label>Disciplinas:</label>
+                <div id="teacherSubjects"></div>
+                <button onclick="addTeacher()">Adicionar Professor</button>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Adicionar Disciplina</h2>
+            <div class="form-group">
+                <label for="subjectName">Nome da Disciplina:</label>
+                <input type="text" id="subjectName">
+            </div>
+            <div class="form-group">
+                <label for="weeklyClasses">Aulas Semanais:</label>
+                <input type="number" id="weeklyClasses" min="1" max="10">
+            </div>
+            <div class="form-group">
+                <label>Restrições:</label>
+                <div id="restrictions"></div>
+                <button onclick="addRestriction()">Adicionar Restrição</button>
+            </div>
+            <button onclick="addSubject()">Adicionar Disciplina</button>
+        </div>
+
+        <div class="form-section">
+            <button onclick="generateSchedule()">Gerar Grade Horária</button>
+            <div id="error" class="error"></div>
+        </div>
+
+        <div id="schedules" class="schedules"></div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
